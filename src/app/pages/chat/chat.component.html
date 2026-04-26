@@ -90,7 +90,7 @@
             </div>
         </header>
 
-        <main class="messages">
+        <main class="messages" #messagesBox>
             <div class="date-pill">Today</div>
 
             @for (msg of chatService.activeMessages(); track msg.id) {

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { ChatService } from '../../core/services/chat.service';
@@ -9,7 +9,8 @@ import { ChatService } from '../../core/services/chat.service';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
-export class ChatComponent {
+export class ChatComponent implements AfterViewChecked {
+  @ViewChild('messagesBox') private messagesBox?: ElementRef<HTMLDivElement>;
   readonly chatService = inject(ChatService);
 
   readonly messageInput = signal('');
@@ -22,7 +23,16 @@ export class ChatComponent {
 
   newChatName = '';
   newChatUsername = '';
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
+  }
 
+  private scrollToBottom(): void {
+    const box = this.messagesBox?.nativeElement;
+    if (!box) return;
+
+    box.scrollTop = box.scrollHeight;
+  }
   readonly emojis = ['😀', '😂', '🔥', '❤️', '👍', '👏', '😎', '🚀', '✅', '💻', '🎯', '✨'];
   readonly profilePhone = signal(localStorage.getItem('user') || 'Guest user');
 

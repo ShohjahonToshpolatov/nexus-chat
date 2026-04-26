@@ -219,6 +219,7 @@
     flex: 1;
     padding: 22px;
     overflow-y: auto;
+    min-height: 0;
 }
 
 .date-pill {
@@ -359,6 +360,7 @@
 
     .chat-panel {
         display: none;
+        min-height: 0;
     }
 
     .chat-layout.sidebar-hidden .sidebar {
