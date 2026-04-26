@@ -118,4 +118,63 @@ export class ChatService {
             )
         );
     }
+    clearActiveChat(): void {
+        this.messagesSignal.update(messages =>
+            messages.filter(message => message.chatId !== this.activeChatId())
+        );
+
+        this.conversationsSignal.update(chats =>
+            chats.map(chat =>
+                chat.id === this.activeChatId()
+                    ? { ...chat, lastMessage: 'No messages yet', lastMessageTime: '' }
+                    : chat
+            )
+        );
+    }
+
+    createChat(name: string, username: string): void {
+        const cleanName = name.trim();
+        const cleanUsername = username.trim();
+
+        if (!cleanName) return;
+
+        const newChat: Conversation = {
+            id: Date.now(),
+            user: {
+                id: Date.now(),
+                name: cleanName,
+                username: cleanUsername || '@new_user',
+                avatar: cleanName[0].toUpperCase(),
+                online: true,
+                lastSeen: 'online'
+            },
+            lastMessage: 'New conversation created',
+            lastMessageTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            unreadCount: 0
+        };
+
+        this.conversationsSignal.update(chats => [newChat, ...chats]);
+        this.activeChatId.set(newChat.id);
+    }
+
+    sendSystemMessage(text: string): void {
+        const cleanText = text.trim();
+        if (!cleanText) return;
+
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        this.messagesSignal.update(messages => [
+            ...messages,
+            {
+                id: Date.now(),
+                chatId: this.activeChatId(),
+                senderId: this.currentUserId,
+                text: cleanText,
+                time,
+                status: 'sent'
+            }
+        ]);
+
+        this.updateLastMessage(cleanText, time);
+    }
 }
