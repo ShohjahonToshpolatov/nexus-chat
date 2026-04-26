@@ -1,1 +1,82 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+    --bg: #0e1621;
+    --panel: #17212b;
+    --panel-2: #202b36;
+    --panel-3: #242f3d;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --line: rgba(148, 163, 184, 0.16);
+    --brand: #2aabee;
+    --brand-2: #229ed9;
+    --green: #22c55e;
+    --danger: #ef4444;
+    --bubble-me: #2b5278;
+    --bubble-other: #182533;
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+    --radius: 22px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(42, 171, 238, 0.18), transparent 28%),
+        var(--bg);
+    color: var(--text);
+    overflow: hidden;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.icon-btn {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    color: var(--muted);
+    transition: 0.2s ease;
+}
+
+.icon-btn:hover {
+    background: var(--panel-3);
+    color: var(--text);
+}
+
+.avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--brand), #7c3aed);
+    color: white;
+    font-weight: 900;
+    flex: 0 0 auto;
+}
+
+.card {
+    background: rgba(23, 33, 43, 0.92);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+}
