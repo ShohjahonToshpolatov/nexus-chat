@@ -1,1 +1,85 @@
-<p>chat works!</p>
+<div class="chat-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+            <h2>NexusChat</h2>
+        </div>
+
+        <div class="search">
+            <input type="text" placeholder="Search..." [ngModel]="chatService.search()"
+                (ngModelChange)="chatService.search.set($event)" />
+        </div>
+
+        <div class="chat-list">
+            @for (chat of chatService.conversations(); track chat.id) {
+            <div class="chat-item" [class.active]="chat.id === chatService.activeChatId()"
+                (click)="chatService.selectChat(chat.id)">
+                <div class="avatar">{{ chat.user.avatar }}</div>
+
+                <div class="meta">
+                    <div class="top">
+                        <strong>{{ chat.user.name }}</strong>
+                        <span>{{ chat.lastMessageTime }}</span>
+                    </div>
+
+                    <div class="bottom">
+                        <span>{{ chat.lastMessage }}</span>
+
+                        @if (chat.unreadCount > 0) {
+                        <div class="badge">{{ chat.unreadCount }}</div>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </aside>
+
+    <!-- CHAT PANEL -->
+    <section class="chat-panel">
+
+        @if (chatService.activeConversation(); as active) {
+
+        <!-- HEADER -->
+        <div class="chat-header">
+            <div class="avatar">{{ active.user.avatar }}</div>
+
+            <div>
+                <strong>{{ active.user.name }}</strong>
+                <span class="status">
+                    {{ active.user.online ? 'online' : active.user.lastSeen }}
+                </span>
+            </div>
+        </div>
+
+        <!-- MESSAGES -->
+        <div class="messages">
+            @for (msg of chatService.activeMessages(); track msg.id) {
+
+            <div class="message" [ngClass]="{
+              'me': msg.senderId === chatService.currentUserId
+            }">
+                <div class="bubble">
+                    {{ msg.text }}
+                    <span class="time">{{ msg.time }}</span>
+                </div>
+            </div>
+
+            }
+        </div>
+
+        <!-- INPUT -->
+        <div class="composer">
+            <input type="text" placeholder="Write a message..." [ngModel]="messageInput()"
+                (ngModelChange)="messageInput.set($event)" (keyup.enter)="send()" />
+
+            <button (click)="send()">➤</button>
+        </div>
+
+        }
+
+    </section>
+
+</div>

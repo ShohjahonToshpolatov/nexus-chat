@@ -1,0 +1,157 @@
+.chat-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    height: 100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 20px;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.search {
+    padding: 10px 14px;
+}
+
+.search input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    background: var(--panel-2);
+    color: white;
+}
+
+.chat-list {
+    overflow-y: auto;
+}
+
+.chat-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.chat-item:hover {
+    background: var(--panel-2);
+}
+
+.chat-item.active {
+    background: var(--panel-3);
+}
+
+.meta {
+    flex: 1;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.badge {
+    background: var(--brand);
+    color: white;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 12px;
+}
+
+/* CHAT PANEL */
+
+.chat-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.status {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.message {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.message.me {
+    justify-content: flex-end;
+}
+
+.bubble {
+    max-width: 60%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    background: var(--bubble-other);
+    position: relative;
+}
+
+.message.me .bubble {
+    background: var(--bubble-me);
+}
+
+.time {
+    display: block;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+/* INPUT */
+
+.composer {
+    display: flex;
+    padding: 12px;
+    border-top: 1px solid var(--line);
+}
+
+.composer input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 999px;
+    border: none;
+    background: var(--panel-2);
+    color: white;
+}
+
+.composer button {
+    margin-left: 10px;
+    background: var(--brand);
+    border: none;
+    color: white;
+    padding: 0 18px;
+    border-radius: 999px;
+}
