@@ -24,7 +24,7 @@ export class ChatComponent {
   newChatUsername = '';
 
   readonly emojis = ['😀', '😂', '🔥', '❤️', '👍', '👏', '😎', '🚀', '✅', '💻', '🎯', '✨'];
-  localStorage: any;
+  readonly profilePhone = signal(localStorage.getItem('user') || 'Guest user');
 
   send(): void {
     const text = this.messageInput();

@@ -168,7 +168,7 @@
     <div class="modal card">
         <h2>Profile</h2>
 
-        <p><b>User:</b> {{ localStorage.getItem('user') }}</p>
+        <p><b>User:</b> {{ profilePhone() }}</p>
 
         <button (click)="showProfile.set(false)">Close</button>
     </div>
