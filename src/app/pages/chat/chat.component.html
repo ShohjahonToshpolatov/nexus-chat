@@ -1,22 +1,32 @@
-<div class="chat-layout">
-
-    <!-- SIDEBAR -->
+<div class="chat-layout" [class.sidebar-hidden]="!showSidebar()">
     <aside class="sidebar">
-
         <div class="sidebar-header">
-            <h2>NexusChat</h2>
+            <button class="menu-btn">☰</button>
+
+            <div>
+                <h2>NexusChat</h2>
+                <span>Frontend Telegram-style UI</span>
+            </div>
+
+            <button class="round-btn">✎</button>
         </div>
 
         <div class="search">
-            <input type="text" placeholder="Search..." [ngModel]="chatService.search()"
+            <span>⌕</span>
+            <input type="text" placeholder="Search chats" [ngModel]="chatService.search()"
                 (ngModelChange)="chatService.search.set($event)" />
         </div>
 
         <div class="chat-list">
             @for (chat of chatService.conversations(); track chat.id) {
-            <div class="chat-item" [class.active]="chat.id === chatService.activeChatId()"
-                (click)="chatService.selectChat(chat.id)">
-                <div class="avatar">{{ chat.user.avatar }}</div>
+            <button class="chat-item" [class.active]="chat.id === chatService.activeChatId()"
+                (click)="openChat(chat.id)">
+                <div class="avatar-wrap">
+                    <div class="avatar">{{ chat.user.avatar }}</div>
+                    @if (chat.user.online) {
+                    <span class="online-dot"></span>
+                    }
+                </div>
 
                 <div class="meta">
                     <div class="top">
@@ -25,61 +35,91 @@
                     </div>
 
                     <div class="bottom">
-                        <span>{{ chat.lastMessage }}</span>
+                        <span>
+                            @if (chat.pinned) { 📌 }
+                            @if (chat.muted) { 🔕 }
+                            {{ chat.lastMessage }}
+                        </span>
 
                         @if (chat.unreadCount > 0) {
-                        <div class="badge">{{ chat.unreadCount }}</div>
+                        <b>{{ chat.unreadCount }}</b>
+                        }
+                    </div>
+                </div>
+            </button>
+            } @empty {
+            <div class="empty-list">No chats found</div>
+            }
+        </div>
+    </aside>
+
+    <section class="chat-panel">
+        @if (chatService.activeConversation(); as active) {
+        <header class="chat-header">
+            <button class="back-btn" (click)="backToChats()">‹</button>
+
+            <div class="avatar-wrap">
+                <div class="avatar">{{ active.user.avatar }}</div>
+                @if (active.user.online) {
+                <span class="online-dot"></span>
+                }
+            </div>
+
+            <div class="chat-title">
+                <strong>{{ active.user.name }}</strong>
+                <span>{{ chatService.isTyping() ? 'typing...' : (active.user.online ? 'online' : active.user.lastSeen)
+                    }}</span>
+            </div>
+
+            <div class="header-actions">
+                <button class="round-btn">⌕</button>
+                <button class="round-btn">⋮</button>
+            </div>
+        </header>
+
+        <main class="messages">
+            <div class="date-pill">Today</div>
+
+            @for (msg of chatService.activeMessages(); track msg.id) {
+            <div class="message" [ngClass]="{ me: msg.senderId === chatService.currentUserId }">
+                <div class="bubble">
+                    <p>{{ msg.text }}</p>
+
+                    <div class="message-meta">
+                        <span>{{ msg.time }}</span>
+
+                        @if (msg.senderId === chatService.currentUserId) {
+                        <span class="status">
+                            {{ msg.status === 'seen' ? '✓✓' : msg.status === 'delivered' ? '✓✓' : '✓' }}
+                        </span>
                         }
                     </div>
                 </div>
             </div>
             }
-        </div>
-    </aside>
 
-    <!-- CHAT PANEL -->
-    <section class="chat-panel">
-
-        @if (chatService.activeConversation(); as active) {
-
-        <!-- HEADER -->
-        <div class="chat-header">
-            <div class="avatar">{{ active.user.avatar }}</div>
-
-            <div>
-                <strong>{{ active.user.name }}</strong>
-                <span class="status">
-                    {{ active.user.online ? 'online' : active.user.lastSeen }}
-                </span>
-            </div>
-        </div>
-
-        <!-- MESSAGES -->
-        <div class="messages">
-            @for (msg of chatService.activeMessages(); track msg.id) {
-
-            <div class="message" [ngClass]="{
-              'me': msg.senderId === chatService.currentUserId
-            }">
-                <div class="bubble">
-                    {{ msg.text }}
-                    <span class="time">{{ msg.time }}</span>
+            @if (chatService.isTyping()) {
+            <div class="message">
+                <div class="bubble typing">
+                    <i></i><i></i><i></i>
                 </div>
             </div>
-
             }
-        </div>
+        </main>
 
-        <!-- INPUT -->
-        <div class="composer">
-            <input type="text" placeholder="Write a message..." [ngModel]="messageInput()"
+        <footer class="composer">
+            <button class="round-btn">😊</button>
+            <button class="round-btn">📎</button>
+
+            <input type="text" placeholder="Message" [ngModel]="messageInput()"
                 (ngModelChange)="messageInput.set($event)" (keyup.enter)="send()" />
 
-            <button (click)="send()">➤</button>
-        </div>
-
+            @if (messageInput().trim()) {
+            <button class="send-btn" (click)="send()">➤</button>
+            } @else {
+            <button class="mic-btn">🎙</button>
+            }
+        </footer>
         }
-
     </section>
-
 </div>
