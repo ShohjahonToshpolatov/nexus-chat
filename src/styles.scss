@@ -80,3 +80,14 @@ a {
     border: 1px solid var(--line);
     box-shadow: var(--shadow);
 }
+
+.light {
+    --bg: #f4f7fb;
+    --panel: #ffffff;
+    --panel-2: #f1f5f9;
+    --panel-3: #e2e8f0;
+    --text: #0f172a;
+    --muted: #64748b;
+    --bubble-other: #e2e8f0;
+    --bubble-me: #3b82f6;
+}

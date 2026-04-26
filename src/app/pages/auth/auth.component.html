@@ -1,0 +1,15 @@
+<div class="auth">
+    <div class="auth-card">
+        <h2>NexusChat</h2>
+
+        @if (step === 1) {
+        <input [(ngModel)]="phone" placeholder="+998 90 123 45 67" />
+        <button (click)="sendCode()">Send code</button>
+        }
+
+        @if (step === 2) {
+        <input [(ngModel)]="code" placeholder="Enter code" />
+        <button (click)="verify()">Login</button>
+        }
+    </div>
+</div>

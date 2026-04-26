@@ -1,15 +1,24 @@
 <div class="chat-layout" [class.sidebar-hidden]="!showSidebar()">
     <aside class="sidebar">
         <div class="sidebar-header">
-            <button class="menu-btn">☰</button>
+            <button class="menu-btn" (click)="showMenu.set(!showMenu())">☰</button>
 
             <div>
                 <h2>NexusChat</h2>
                 <span>Frontend Telegram-style UI</span>
             </div>
 
-            <button class="round-btn">✎</button>
+            <button class="round-btn" (click)="showNewChat.set(true)">✎</button>
         </div>
+
+        @if (showMenu()) {
+        <div class="side-menu card">
+            <button (click)="showProfile.set(true)">👤 Profile</button>
+            <button (click)="toggleTheme()">🌙 Dark mode</button>
+            <button>⚙ Settings</button>
+            <button (click)="clearChat()">🗑 Clear active chat</button>
+        </div>
+        }
 
         <div class="search">
             <span>⌕</span>
@@ -66,14 +75,18 @@
             </div>
 
             <div class="chat-title">
+                @if (showHeaderSearch()) {
+                <input class="header-search" placeholder="Search in chat..." autofocus />
+                } @else {
                 <strong>{{ active.user.name }}</strong>
                 <span>{{ chatService.isTyping() ? 'typing...' : (active.user.online ? 'online' : active.user.lastSeen)
                     }}</span>
+                }
             </div>
 
             <div class="header-actions">
-                <button class="round-btn">⌕</button>
-                <button class="round-btn">⋮</button>
+                <button class="round-btn" (click)="showHeaderSearch.set(!showHeaderSearch())">⌕</button>
+                <button class="round-btn" (click)="showMenu.set(!showMenu())">⋮</button>
             </div>
         </header>
 
@@ -108,8 +121,16 @@
         </main>
 
         <footer class="composer">
-            <button class="round-btn">😊</button>
-            <button class="round-btn">📎</button>
+            <button class="round-btn" (click)="showEmojiPicker.set(!showEmojiPicker())">😊</button>
+            <button class="round-btn" (click)="attachFile()">📎</button>
+
+            @if (showEmojiPicker()) {
+            <div class="emoji-picker card">
+                @for (emoji of emojis; track emoji) {
+                <button (click)="addEmoji(emoji)">{{ emoji }}</button>
+                }
+            </div>
+            }
 
             <input type="text" placeholder="Message" [ngModel]="messageInput()"
                 (ngModelChange)="messageInput.set($event)" (keyup.enter)="send()" />
@@ -117,9 +138,39 @@
             @if (messageInput().trim()) {
             <button class="send-btn" (click)="send()">➤</button>
             } @else {
-            <button class="mic-btn">🎙</button>
+            <button class="mic-btn" (click)="sendVoice()">🎙</button>
             }
         </footer>
         }
     </section>
 </div>
+
+@if (showNewChat()) {
+<div class="modal-backdrop">
+    <form class="modal card" (ngSubmit)="createChat()">
+        <h2>New chat</h2>
+        <p>Create a new frontend-only conversation.</p>
+
+        <input name="name" required [(ngModel)]="newChatName" placeholder="Contact name" />
+
+        <input name="username" [(ngModel)]="newChatUsername" placeholder="@username" />
+
+        <div class="modal-actions">
+            <button type="button" class="ghost" (click)="showNewChat.set(false)">Cancel</button>
+            <button class="primary">Create</button>
+        </div>
+    </form>
+</div>
+}
+
+@if (showProfile()) {
+<div class="modal-backdrop">
+    <div class="modal card">
+        <h2>Profile</h2>
+
+        <p><b>User:</b> {{ localStorage.getItem('user') }}</p>
+
+        <button (click)="showProfile.set(false)">Close</button>
+    </div>
+</div>
+}
